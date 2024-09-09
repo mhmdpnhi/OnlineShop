@@ -1,8 +1,8 @@
-using Core.Models;
+using EndPoint.Shop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Core.Controllers
+namespace EndPoint.Shop.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,4 +1,4 @@
-namespace Core.Models
+namespace EndPoint.Shop.Models
 {
     public class ErrorViewModel
     {

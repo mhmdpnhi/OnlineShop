@@ -2,10 +2,12 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace OnlineShop.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Users : Migration
+    public partial class Users_and_Roles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,7 +16,7 @@ namespace OnlineShop.Persistence.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -45,31 +47,39 @@ namespace OnlineShop.Persistence.Migrations
                 {
                     Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    RoleId1 = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                    UserId = table.Column<decimal>(type: "decimal(20,0)", nullable: true),
+                    RoleId = table.Column<decimal>(type: "decimal(20,0)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserInRoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserInRoles_Roles_RoleId1",
-                        column: x => x.RoleId1,
+                        name: "FK_UserInRoles_Roles_RoleId",
+                        column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UserInRoles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1m, "Admin" },
+                    { 2m, "Author" },
+                    { 3m, "Customer" },
+                    { 4m, "Operator" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInRoles_RoleId1",
+                name: "IX_UserInRoles_RoleId",
                 table: "UserInRoles",
-                column: "RoleId1");
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserInRoles_UserId",

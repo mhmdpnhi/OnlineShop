@@ -11,8 +11,8 @@ using OnlineShop.Persistence.Contexts;
 namespace OnlineShop.Persistence.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20240915185651_Users")]
-    partial class Users
+    [Migration("20240923175417_Users_and_Roles")]
+    partial class Users_and_Roles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,11 @@ namespace OnlineShop.Persistence.Migrations
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Users.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("decimal(20,0)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -39,6 +39,28 @@ namespace OnlineShop.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1m,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2m,
+                            Name = "Author"
+                        },
+                        new
+                        {
+                            Id = 3m,
+                            Name = "Customer"
+                        },
+                        new
+                        {
+                            Id = 4m,
+                            Name = "Operator"
+                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Users.User", b =>
@@ -78,18 +100,15 @@ namespace OnlineShop.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"));
 
-                    b.Property<decimal>("RoleId")
+                    b.Property<decimal?>("RoleId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<int>("RoleId1")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("UserId")
+                    b.Property<decimal?>("UserId")
                         .HasColumnType("decimal(20,0)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId1");
+                    b.HasIndex("RoleId");
 
                     b.HasIndex("UserId");
 
@@ -99,25 +118,16 @@ namespace OnlineShop.Persistence.Migrations
             modelBuilder.Entity("OnlineShop.Domain.Entities.Users.UserInRole", b =>
                 {
                     b.HasOne("OnlineShop.Domain.Entities.Users.Role", "Role")
-                        .WithMany("UserInRoles")
-                        .HasForeignKey("RoleId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("OnlineShop.Domain.Entities.Users.User", "User")
                         .WithMany("UserInRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OnlineShop.Domain.Entities.Users.Role", b =>
-                {
-                    b.Navigation("UserInRoles");
                 });
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Users.User", b =>

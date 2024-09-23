@@ -1,0 +1,64 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="pagetitle">
+    <h1>Create User</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+            <li class="breadcrumb-item"><a href="~/Admin/User/Index">Users</a></li>
+            <li class="breadcrumb-item active"><a href="~/Admin/User/Create">Create</a></li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">User Info</h5>
+
+                    <!-- Form Elements -->
+                    <form>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Fill The Fields</label>
+                            <div class="col-sm-10">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">@@</span>
+                                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+                                    <label for="floatingEmail">Email address</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="floatingPhone" placeholder="+98">
+                                    <label for="floatingPhone">Phone Number</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                    <label for="floatingPassword">Password</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="Role" aria-label="select a role" asp-items="@ViewBag.Roles">
+                                        <option selected>Choose a role</option>
+                                    </select>
+                                    <label for="Role">Roles</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form><!-- End General Form Elements -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

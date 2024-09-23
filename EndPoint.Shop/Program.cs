@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Application.Interfaces.Contexts;
+using OnlineShop.Application.Services.Users.Queries.Get;
+using OnlineShop.Persistence.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option =>
+    option.UseSqlServer(@"Data Source=localHost\MyInstance; Initial Catalog=OnlineShop; User Id=mhmd; Password=13811381; Encrypt=false;")    
+);
+builder.Services.AddScoped<IDataBaseContext, DataBaseContext>();
+builder.Services.AddScoped<IGetUserService, GetUserService>();
 
 var app = builder.Build();
 
@@ -20,8 +31,19 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "areas",
+        pattern: "{area:exists}/{controller=Profile}/{action=Index}/{id?}");
+});
 
 app.Run();

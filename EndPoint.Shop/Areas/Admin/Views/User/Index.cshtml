@@ -1,0 +1,62 @@
+﻿@using OnlineShop.Application.Services.Users.Queries.Get;
+@model GetUserResultDto;
+
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="pagetitle">
+    <h1>Data Tables</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item">Tables</li>
+            <li class="breadcrumb-item active">Data</li>
+        </ol>
+    </nav>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">لیست کاربران</h5>
+                    <p>list of users can be seen in the table below.</p>
+
+                    <table class="table datatable">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>UserName</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Users)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Phone</td>
+                                    <td>@item.Email</td>
+                                    <td>
+                                        <button class="btn btn-info">Edit</button>
+                                        <button class="btn btn-danger">Delete</button>
+                                        <button class="btn btn-warning">DeActive</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

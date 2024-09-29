@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Persistence.Contexts;
 
@@ -11,9 +12,11 @@ using OnlineShop.Persistence.Contexts;
 namespace OnlineShop.Persistence.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240928103715_BaseEntity")]
+    partial class BaseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,28 +57,28 @@ namespace OnlineShop.Persistence.Migrations
                         new
                         {
                             Id = 1m,
-                            CreatedDateTime = new DateTime(2024, 9, 28, 17, 44, 47, 264, DateTimeKind.Local).AddTicks(5755),
+                            CreatedDateTime = new DateTime(2024, 9, 28, 14, 6, 59, 623, DateTimeKind.Local).AddTicks(8518),
                             IsDeleted = false,
                             Name = "Admin"
                         },
                         new
                         {
                             Id = 2m,
-                            CreatedDateTime = new DateTime(2024, 9, 28, 17, 44, 47, 264, DateTimeKind.Local).AddTicks(5890),
+                            CreatedDateTime = new DateTime(2024, 9, 28, 14, 6, 59, 623, DateTimeKind.Local).AddTicks(9085),
                             IsDeleted = false,
                             Name = "Author"
                         },
                         new
                         {
                             Id = 3m,
-                            CreatedDateTime = new DateTime(2024, 9, 28, 17, 44, 47, 264, DateTimeKind.Local).AddTicks(5941),
+                            CreatedDateTime = new DateTime(2024, 9, 28, 14, 6, 59, 623, DateTimeKind.Local).AddTicks(9320),
                             IsDeleted = false,
                             Name = "Customer"
                         },
                         new
                         {
                             Id = 4m,
-                            CreatedDateTime = new DateTime(2024, 9, 28, 17, 44, 47, 264, DateTimeKind.Local).AddTicks(5989),
+                            CreatedDateTime = new DateTime(2024, 9, 28, 14, 6, 59, 623, DateTimeKind.Local).AddTicks(9423),
                             IsDeleted = false,
                             Name = "Operator"
                         });
@@ -122,9 +125,8 @@ namespace OnlineShop.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email", "DeleteDateTime")
-                        .IsUnique()
-                        .HasFilter("[DeleteDateTime] IS NOT NULL");
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });

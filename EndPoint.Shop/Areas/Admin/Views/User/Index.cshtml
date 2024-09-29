@@ -1,4 +1,9 @@
-﻿@using OnlineShop.Application.Services.Users.Queries.Get;
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using OnlineShop.Application.Services.Users.Queries.Get;
+@using OnlineShop.Common.Extensions
+@using OnlineShop.Domain.Entities.Users
+
 @model GetUserResultDto;
 
 @{
@@ -7,12 +12,12 @@
 }
 
 <div class="pagetitle">
-    <h1>Data Tables</h1>
+    <h1>مشاهده لیست کاربران</h1>
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item">Tables</li>
-            <li class="breadcrumb-item active">Data</li>
+            <li class="breadcrumb-item"><a href="index.html">ادمین</a></li>
+            <li class="breadcrumb-item">کاربران</li>
+            <li class="breadcrumb-item active">لیست کاربران</li>
         </ol>
     </nav>
 </div><!-- End Page Title -->
@@ -24,16 +29,24 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">لیست کاربران</h5>
-                    <p>list of users can be seen in the table below.</p>
+                    <p>.لیست کاربران در جدول زیر قابل نمایش است</p>
+
+                    <form method="Index" class="col-xl-4 col-lg-6 col-md-12 mb-1">
+                        <fieldset class="form-group">
+                            <input type="text" class="form-control" name="searchkey">
+                            <button class="btn btn-success">جستجو</button>
+                        </fieldset>
+                    </form>
 
                     <table class="table datatable">
                         <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>UserName</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Action</th>
+                                <th>شناسه</th>
+                                <th>نام کاربری</th>
+                                <th>شماره همراه</th>
+                                <th>ایمیل</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,10 +57,20 @@
                                     <td>@item.UserName</td>
                                     <td>@item.Phone</td>
                                     <td>@item.Email</td>
+                                    <td class="@(item.Status switch
+                                        {
+                                            UserStatus.Active => "status-active",
+                                            UserStatus.Inactive => "status-inactive",
+                                            UserStatus.Pending => "status-pending",
+                                            _ => ""
+                                        })
+                                                        ">
+                                        @item.Status.GetDescription()
+                                    </td>
                                     <td>
-                                        <button class="btn btn-info">Edit</button>
-                                        <button class="btn btn-danger">Delete</button>
-                                        <button class="btn btn-warning">DeActive</button>
+                                        <button onclick="ShowModalUpdateUser('@item.Id', '@item.UserName', '@item.Phone', '@item.Password', '@item.Status')" class="btn btn-info">ویرایش</button>
+                                        <button onclick="DeleteUser(@item.Id)" class="btn btn-danger">حذف</button>
+                                        <button onclick="DeActiveUser(@item.Id)" class="btn btn-warning">غیرفعال کردن</button>
                                     </td>
                                 </tr>
                             }
@@ -60,3 +83,249 @@
         </div>
     </div>
 </section>
+
+
+@section Scripts
+{
+
+    <link href="~/lib/Sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/lib/Sweetalert2/sweetalert2.min.js"></script>
+
+    <script>
+
+
+        function DeleteUser(UserId) {
+            swal.fire({
+                title: 'حذف کاربر',
+                text: "کاربر گرامی از حذف کاربر مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ، کاربر حذف شود',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+                    var postData = {
+                        'UserId': UserId,
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "Delete",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            })
+        }
+
+
+        function DeActiveUser(UserId) {
+            swal.fire({
+                title: 'غیرفعال کردن کاربر',
+                text: "کاربر گرامی از غیرفعال کردن کاربر مطمئن هستید؟",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#7cacbe',
+                confirmButtonText: 'بله ، تغییر وضعیت انجام شود',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.value) {
+
+                    var postData = {
+                        'UserId': UserId,
+                        // Chnage user status to InActive
+                        'Status': 'InActive'
+                    };
+
+                    $.ajax({
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        type: "POST",
+                        url: "ChangeStatus",
+                        data: postData,
+                        success: function (data) {
+                            if (data.isSuccess == true) {
+                                swal.fire(
+                                    'موفق!',
+                                    data.message,
+                                    'success'
+                                ).then(function (isConfirm) {
+                                    location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.fire(
+                                    'هشدار!',
+                                    data.message,
+                                    'warning'
+                                );
+
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(request.responseText);
+                        }
+
+                    });
+
+                }
+            })
+        }
+
+
+        function UpdateUser() {
+
+            var userId = $('#Update_UserId').val()
+            var userName = $('#Update_UserName').val()
+            var phone = $('#Update_Phone').val()
+            var password = $('#Update_Password').val()
+            var status = $('#Update_Status option:selected').text();
+
+            var postData = {
+                'UserId': userId,
+                'userName': userName,
+                'phone' : phone,
+                'password' : password,
+                'status' : status
+            };
+
+
+            $.ajax({
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'json',
+                type: "POST",
+                url: "Update",
+                data: postData,
+                success: function (data) {
+                    if (data.isSuccess == true) {
+                        swal.fire(
+                            'موفق!',
+                            data.message,
+                            'success'
+                        ).then(function (isConfirm) {
+                            location.reload();
+                        });
+                    }
+                    else {
+                        swal.fire(
+                            'هشدار!',
+                            data.message,
+                            'warning'
+                        );
+                    }
+                },
+                error: function (request, status, error) {
+                    alert(request.responseText);
+                }
+            });
+
+            $('#UpdateUser').modal('hide');
+
+        }
+
+
+        function ShowModalUpdateUser(UserId, UserName, Phone, Password, Status) {
+            $('#Update_UserId').val(UserId)
+            $('#Update_UserName').val(UserName)
+            $('#Update_Phone').val(Phone)
+            $('#Update_Password').val(Password)
+
+            $('#Update_Status option').filter(function () {
+                return $(this).text() === Status;
+            }).prop('selected', true);
+
+            $('#UpdateUser').modal('show');
+
+        }
+
+    </script>
+}
+
+
+@section Styles
+{
+    <style>
+        .status-active {
+            color: green !important;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: red !important;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: lightyellow !important;
+            font-weight: bold;
+        }
+    </style>
+}
+
+@section Modals
+{
+    <!-- Modal Update User -->
+    <div class="modal fade" id="UpdateUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">بروزرسانی کاربر</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
+                        <fieldset class="form-group">
+                            <label for="Update_UserId">شناسه کاربری</label>
+                            <input type="text" class="form-control" id="Update_UserId" disabled />
+                            <label for="Update_UserName">نام کاربری</label>
+                            <input type="text" class="form-control" id="Update_UserName">
+                            <label for="Update_Phone">تلفن همراه</label>
+                            <input type="text" class="form-control" id="Update_Phone">
+                            <label for="Update_Password">رمز عبور</label>
+                            <input type="password" class="form-control" id="Update_Password">
+                            <label for="Update_Status">نقش ها</label>
+                            <select class="form-select" id="Update_Status" asp-items=@ViewBag.Statuses>
+                            </select>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-secondary" data-dismiss="UpdateUser">بستن</a>
+                    <a class="btn btn-primary" onclick="UpdateUser()">اعمال تغییرات</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

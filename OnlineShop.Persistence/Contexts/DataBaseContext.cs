@@ -40,6 +40,13 @@ namespace OnlineShop.Persistence.Contexts
                 Id = 4,
                 Name = nameof(UserRoles.Operator)
             });
+
+            // Applying index on the User entity's email.
+            // Making email unique in the User entity.
+            modelBuilder.Entity<User>().HasIndex(u => new { u.Email, u.DeleteDateTime }).IsUnique();
+
+            // Query only users which are not deleted 
+            modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDeleted);
         }
 
     }

@@ -2,6 +2,6 @@
 {
     public class RolesInCreateUserRequestInfo
     {
-        public byte Id { get; set; }
+        public ulong Id { get; set; }
     }
 }

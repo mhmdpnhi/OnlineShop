@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnlineShop.Domain.Entities.Common;
 
 namespace OnlineShop.Domain.Entities.Users
 {
-    public class Role
+    public class Role : BaseEntity
     {
-        [Key]
-        public ulong Id { get; set; }
         public string Name { get; set; }
-        //public ICollection<UserInRole> UserInRoles { get; set; }
+        public ICollection<UserInRole> UserInRoles { get; set; }
     }
 }

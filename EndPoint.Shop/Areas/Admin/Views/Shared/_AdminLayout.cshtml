@@ -9,6 +9,8 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+    @RenderSection("Styles", required : false)
+
     <!-- Favicons -->
     <link href="~/lib/AdminPanel/assets/img/favicon.png" rel="icon">
     <link href="~/lib/AdminPanel/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -546,6 +548,11 @@
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+    @RenderSection("Scripts", required: false)
+
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- Vendor JS Files -->
     <script src="~/lib/AdminPanel/assets/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="~/lib/AdminPanel/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -555,9 +562,12 @@
     <script src="~/lib/AdminPanel/assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="~/lib/AdminPanel/assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="~/lib/AdminPanel/assets/vendor/php-email-form/validate.js"></script>
-  
+
     <!-- Template Main JS File -->
     <script src="~/lib/AdminPanel/assets/js/main.js"></script>
+
+
+    @RenderSection("Modals", required : false)
 
 </body>
 

@@ -27,7 +27,9 @@ namespace OnlineShop.Application.Services.Users.Queries.Get
                 Id = u.Id, 
                 UserName = u.UserName,
                 Email = u.Email,
-                Phone = u.Phone
+                Phone = u.Phone,
+                Status = u.Status,
+                Password = u.Password
             }).ToList();
 
             return new GetUserResultDto

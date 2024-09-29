@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Application.Interfaces.Contexts;
+using OnlineShop.Application.Services.Users.Commands.ChangeStatus;
+using OnlineShop.Application.Services.Users.Commands.Create;
+using OnlineShop.Application.Services.Users.Commands.Delete;
+using OnlineShop.Application.Services.Users.Commands.Update;
 using OnlineShop.Application.Services.Users.Queries.Get;
 using OnlineShop.Application.Services.Users.Queries.GetRoles;
 using OnlineShop.Persistence.Contexts;
@@ -15,6 +19,10 @@ builder.Services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(opt
 builder.Services.AddScoped<IDataBaseContext, DataBaseContext>();
 builder.Services.AddScoped<IGetUserService, GetUserService>();
 builder.Services.AddScoped<IGetUserRolesService, GetUserRolesService>();
+builder.Services.AddScoped<ICreateUserService, CreateUserService>();
+builder.Services.AddScoped<IDeleteUserService, DeleteUserService>();
+builder.Services.AddScoped<IChangeUserStatusService, ChangeUserStatusService>();
+builder.Services.AddScoped<IUpdateUserService, UpdateUserService>();
 
 var app = builder.Build();
 

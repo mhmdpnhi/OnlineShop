@@ -28,6 +28,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="wwwroot\css\Authentication.css" />
+	  <Content Remove="wwwroot\js\Authentication.js" />
+	  <Content Remove="wwwroot\lib\ECommerce\js\CustomeJS.js" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\OnlineShop.Application\OnlineShop.Application.csproj" />
 	  <ProjectReference Include="..\OnlineShop.Persistence\OnlineShop.Persistence.csproj" />
 	</ItemGroup>

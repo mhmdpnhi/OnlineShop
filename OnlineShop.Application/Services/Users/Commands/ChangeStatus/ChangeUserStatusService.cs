@@ -1,5 +1,5 @@
 ﻿using OnlineShop.Application.Interfaces.Contexts;
-using OnlineShop.Common.Dto;
+using OnlineShop.Common.Dto.Base;
 using OnlineShop.Common.Extensions;
 using OnlineShop.Domain.Entities.Users;
 

@@ -1,4 +1,4 @@
-﻿using OnlineShop.Common.Dto;
+﻿using OnlineShop.Common.Dto.Base;
 
 namespace OnlineShop.Application.Services.Users.Commands.Delete
 {

@@ -1,7 +1,7 @@
 ﻿using OnlineShop.Application.Interfaces.Contexts;
-using OnlineShop.Common.Dto;
+using OnlineShop.Common;
+using OnlineShop.Common.Dto.Base;
 using OnlineShop.Domain.Entities.Users;
-using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Application.Services.Users.Commands.Create
 {
@@ -27,12 +27,14 @@ namespace OnlineShop.Application.Services.Users.Commands.Create
                 if (String.IsNullOrWhiteSpace(req.Email))
                     throw new Exception("Email cant be null.");
 
+                var passHasher = new PasswordHasher();
+
                 var user = new User
                 {
                     UserName = req.UserName,
                     Email = req.Email,
                     Phone = req.Phone,
-                    Password = req.Password
+                    Password = passHasher.HashPassword(req.Password)
                 };
 
                 var roles = new List<UserInRole>();

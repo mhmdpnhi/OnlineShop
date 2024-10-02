@@ -1,4 +1,4 @@
-﻿using OnlineShop.Common.Dto;
+﻿using OnlineShop.Common.Dto.Base;
 using OnlineShop.Domain.Entities.Users;
 
 namespace OnlineShop.Application.Services.Users.Commands.ChangeStatus

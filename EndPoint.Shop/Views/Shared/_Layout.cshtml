@@ -12,7 +12,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>Online Shop</title>
+    <title>@ViewData["Title"]</title>
 
     <!-- slider stylesheet -->
     <link rel="stylesheet" type="text/css"
@@ -62,15 +62,27 @@
                             </li>
                         </ul>
                         <div class="user_option">
-                            <a href="">
-                                <img src="~/lib/ECommerce/images/user.png" alt="">
-                                <span>
-                                    Login
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <span style="display: inline-block; margin-right: 10px;">
+                                    @User.Identity.Name
                                 </span>
-                            </a>
-                            <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
-                                <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>
-                            </form>
+                                <br />
+                                <a href="/Authentication/SignOut">
+                                    <span>
+                                        LogOut
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="/Authentication/">
+                                    <img src="~/lib/ECommerce/images/user.png" alt="">
+                                    <span>
+                                        Login
+                                    </span>
+                                </a>
+                            }
                         </div>
                     </div>
                     <div>
@@ -404,23 +416,23 @@
     </script>
     <script type="text/javascript">
         $(".owl-carousel").owlCarousel({
-          loop: true,
-          margin: 10,
-          nav: true,
-          navText: [],
-          autoplay: true,
-          autoplayHoverPause: true,
-          responsive: {
-            0: {
-              items: 1
-            },
-            420: {
-              items: 2
-            },
-            1000: {
-              items: 5
+            loop: true,
+            margin: 10,
+            nav: true,
+            navText: [],
+            autoplay: true,
+            autoplayHoverPause: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                420: {
+                    items: 2
+                },
+                1000: {
+                    items: 5
+                }
             }
-          }
 
         });
     </script>
@@ -430,17 +442,17 @@
         btn.click
         btn.click(function (e) {
 
-          e.preventDefault();
-          nav.toggleClass("lg_nav-toggle");
-          document.querySelector(".custom_menu-btn").classList.toggle("menu_btn-style")
+            e.preventDefault();
+            nav.toggleClass("lg_nav-toggle");
+            document.querySelector(".custom_menu-btn").classList.toggle("menu_btn-style")
         });
     </script>
     <script>
         $('.carousel').on('slid.bs.carousel', function () {
-          $(".indicator-2 li").removeClass("active");
-          indicators = $(".carousel-indicators li.active").data("slide-to");
-          a = $(".indicator-2").find("[data-slide-to='" + indicators + "']").addClass("active");
-          console.log(indicators);
+            $(".indicator-2 li").removeClass("active");
+            indicators = $(".carousel-indicators li.active").data("slide-to");
+            a = $(".indicator-2").find("[data-slide-to='" + indicators + "']").addClass("active");
+            console.log(indicators);
 
         })
     </script>

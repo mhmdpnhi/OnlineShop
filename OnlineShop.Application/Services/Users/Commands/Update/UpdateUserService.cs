@@ -1,5 +1,6 @@
 ﻿using OnlineShop.Application.Interfaces.Contexts;
-using OnlineShop.Common.Dto;
+using OnlineShop.Common;
+using OnlineShop.Common.Dto.Base;
 
 namespace OnlineShop.Application.Services.Users.Commands.Update
 {
@@ -14,6 +15,7 @@ namespace OnlineShop.Application.Services.Users.Commands.Update
 
         public async Task<ResultDto> ExcuteAsync(UpdateUserRequestInfo req)
         {
+            var passHasher = new PasswordHasher();
             var user = await _context.Users.FindAsync(req.Id);
 
             if (user is null)
@@ -26,7 +28,7 @@ namespace OnlineShop.Application.Services.Users.Commands.Update
             }
             else 
             {
-                user.Password = req.Password;
+                user.Password = passHasher.HashPassword(req.Password);
                 user.Phone = req.Phone;
                 user.UserName = req.UserName;
                 user.UpdatedDatetime = DateTime.Now;

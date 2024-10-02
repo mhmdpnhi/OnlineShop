@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Application.Interfaces.Contexts;
+using OnlineShop.Application.Services.Authentications.Command.SignUp;
+using OnlineShop.Application.Services.Authentications.Query.SignIn;
 using OnlineShop.Application.Services.Users.Commands.ChangeStatus;
 using OnlineShop.Application.Services.Users.Commands.Create;
 using OnlineShop.Application.Services.Users.Commands.Delete;
@@ -13,9 +15,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Add Cookie Authentication Service
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+{
+    options.LoginPath = new PathString("/authentication/"); 
+    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    options.SlidingExpiration = true;
+});
+
 builder.Services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option =>
-    option.UseSqlServer(@"Data Source=localHost\MyInstance; Initial Catalog=OnlineShop; User Id=mhmd; Password=13811381; Encrypt=false;")    
+    option.UseSqlServer(@"Data Source=localHost\MyInstance; Initial Catalog=OnlineShop; User Id=mhmd; Password=13811381; Encrypt=false;")
 );
+
 builder.Services.AddScoped<IDataBaseContext, DataBaseContext>();
 builder.Services.AddScoped<IGetUserService, GetUserService>();
 builder.Services.AddScoped<IGetUserRolesService, GetUserRolesService>();
@@ -23,6 +40,8 @@ builder.Services.AddScoped<ICreateUserService, CreateUserService>();
 builder.Services.AddScoped<IDeleteUserService, DeleteUserService>();
 builder.Services.AddScoped<IChangeUserStatusService, ChangeUserStatusService>();
 builder.Services.AddScoped<IUpdateUserService, UpdateUserService>();
+builder.Services.AddScoped<ISignUpUserService, SignUpUserService>();
+builder.Services.AddScoped<ISignInUserService, SignInUserService>();
 
 var app = builder.Build();
 
@@ -39,6 +58,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 //app.MapControllerRoute(

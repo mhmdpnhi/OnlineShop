@@ -1,4 +1,4 @@
-﻿namespace OnlineShop.Common.Dto
+﻿namespace OnlineShop.Common.Dto.Base
 {
     public class BaseUpdateRequestInfo<IIdType>
     {

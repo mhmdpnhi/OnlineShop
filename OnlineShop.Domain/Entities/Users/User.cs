@@ -9,6 +9,6 @@ namespace OnlineShop.Domain.Entities.Users
         public string Phone { get; set; }
         public string Password { get; set; }
         public UserStatus Status { get; set; }
-        public ICollection<UserInRole> UserInRoles { get; set; }
+        public ICollection<UserInRole> UserInRoles { get; set; } = new List<UserInRole>();
     }
 }

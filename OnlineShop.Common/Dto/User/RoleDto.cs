@@ -1,4 +1,4 @@
-﻿namespace OnlineShop.Application.Services.Users.Queries.GetRoles
+﻿namespace OnlineShop.Common.Dto.User
 {
     public class RoleDto
     {
